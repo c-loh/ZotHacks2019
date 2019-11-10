@@ -134,6 +134,10 @@ def print_food(food):
     table = json.loads(json_text)
     #print(table)
     for i in table["meals"]:
+        print("Ingredients:")
+        for a in range(1,21):
+            if i[f"strIngredient{a}"] != "":
+                print(i[f"strIngredient{a}"],i[f"strMeasure{a}"])
         print(i["strMeal"]+":")
         print (i['strInstructions'])
         print()
