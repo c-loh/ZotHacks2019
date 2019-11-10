@@ -7,7 +7,7 @@ import urllib.request
 # that has the YouTube Data API activated.  I've created such an API key
 # for this course -- which I'll email out separately -- but you can also
 # create your own, if you prefer.
-GOOGLE_API_KEY = 'AIzaSyBliJeMB_HAaOGKxeGX4-KJzoIjB3gTx7c'
+GOOGLE_API_KEY = 'AIzaSyAo_ZSrnG3i80YVJw4Q2X7xygbxPzqyhAM'
 
 # All of the services provided by the YouTube Data API have URLs that
 # begin like this; it's simply a matter of adding the rest of the URL
@@ -17,6 +17,9 @@ titlelist = []
 idlist = []
 thumbnaillist = []
 likes_views = []
+
+FOOD_URL = "https://www.themealdb.com/api/json/v1/1/filter.php?i="
+
 
 
 
@@ -81,6 +84,7 @@ def addlist(search_result: dict) -> None:
         idlist.append(item["id"]["videoId"])
         titlelist.append(item["snippet"]["title"])
         thumbnaillist.append(item["snippet"]["thumbnails"]["default"]["url"])
+        print(item)
 
     for i in idlist:
         url = f"https://www.googleapis.com/youtube/v3/videos?part=statistics&id={i}&key={GOOGLE_API_KEY}"
@@ -89,8 +93,7 @@ def addlist(search_result: dict) -> None:
         json_text = response.read().decode(encoding = 'utf-8')
         print(json_text)
 
-        likes_views.append(json_text["items"]["statistics"]["likeCount"])#json_text["items"]["statistics"]["viewCount"]))
-        #print(json.loads(json_text))
+        likes_views.append((json_text["items"][0]["statistics"]["likeCount"],json_text["items"][0]["statistics"]["viewCount"]))
 
     print(likes_views)
 
@@ -102,15 +105,49 @@ def addlist(search_result: dict) -> None:
         likes = idlis"""
 
 
+def get_recipes():
+    x = True
+    foodlist = []
+    while x:
+        main_food = input("What main food?")
+        link = FOOD_URL+str(main_food)
+        response = urllib.request.urlopen(link)
+        json_text = response.read().decode(encoding = 'utf-8')
+        table = json.loads(json_text)
+        if table["meals"] !=None:
+            x = False
+        if x:
+            print("invalid food option, try again")
+    for i in range(len(table["meals"])):
+        foodlist.append((i+1,table["meals"][i]["strMeal"]))
+    print("Which meal? Select number")
+    for i in foodlist:
+        print(i[0],i[1])
+    foodnumber = int(input())
+    currentfood = foodlist[foodnumber-1][1].lower().replace(" ","_")
+    return currentfood
+    
+def print_food(food):
+    url = f"https://www.themealdb.com/api/json/v1/1/search.php?s={food}"
+    response = urllib.request.urlopen(url)
+    json_text = response.read().decode(encoding = 'utf-8')
+    table = json.loads(json_text)
+    #print(table)
+    for i in table["meals"]:
+        print(i["strMeal"]+":")
+        print (i['strInstructions'])
+        print()
 
 
 
 def run() -> None:
-    search_query = input('Query: ')
-    x = build_search_url(search_query,10)
+    #search_query = input('Query: ')
+    current_food = get_recipes()
+    print_food(current_food)
+   # x = build_search_url(search_query,1)
     #print(x)
-    result = get_result(x)
-    addlist(result)
+    #result = get_result(x)
+    #addlist(result)
 
 
 
