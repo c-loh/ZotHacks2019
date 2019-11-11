@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Switch, Router } from 'react-router-dom';
+import axios from "axios"
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 function Home(){
 
-    function handleInputChange(e) {
+    const [foodName, setFoodName] = useState("")
 
+    function handleInputChange(e) {
+        setFoodName(e.target.value);
+        //console.log(foodName);
     }
 
     function handleSubmit(e) {
-
+        e.preventDefault()  // makes sure it doesn't re-render the whole page after submitting
+        // send to backend --> axios
+        axios.post('http://localhost:3000/answer', "").then(res => {
+            console.log(res.data);
+          }).catch(err => {
+            console.log("IT DIDNT WORK");
+          })
     }
 
     return (
