@@ -11,6 +11,7 @@ idlist = []
 thumbnaillist = []
 likes = []
 videos_to_display = []
+foodlist = []
 FOOD_URL = "https://www.themealdb.com/api/json/v1/1/filter.php?i="
 
 
@@ -73,7 +74,6 @@ def addlist(search_result: dict) -> None:
 
 def get_recipes(main_food):
     x = True
-    foodlist = []
     while x:
         #main_food = input("What main food?")  use paramater instead
         link = FOOD_URL+str(main_food)
@@ -142,11 +142,9 @@ def hello_world(food,number):
     table = print_food(food_string)
     
     #for youtube link
-    url = build_search_url(foodsearch(number))
+    url = build_search_url(food_search(number),3)
     answer = get_result(url) #returns json of all food info
-]   table_two = addlist(answer)
+    table_two = addlist(answer)
     return f'{food}'
 
 
-if __name__ == '__main__':
-    run()
