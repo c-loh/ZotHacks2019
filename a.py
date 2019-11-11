@@ -56,6 +56,7 @@ def addlist(search_result: dict) -> None:
         json_text = json.loads(json_text)
         likes.append(int(json_text["items"][0]["statistics"]["likeCount"]))
 
+    #Finds the videos with the 3 highest likes
     index_one = likes.index(max(likes))
     likes[index_one] = 0
     index_two = likes.index(max(likes))
@@ -64,6 +65,7 @@ def addlist(search_result: dict) -> None:
     videos_to_display.append((titlelist[index_one],youtube_link+idlist[index_one],thumbnaillist[index_one]))
     videos_to_display.append((titlelist[index_two],youtube_link+idlist[index_two],thumbnaillist[index_two]))
     videos_to_display.append((titlelist[index_three],youtube_link+idlist[index_three],thumbnaillist[index_three]))
+    #returns 3-tuple list that has title of video,link,thumbnail
     return videos_to_display
 
 
@@ -88,6 +90,8 @@ def get_recipes(main_food):
         foodlist.append((i+1,table["meals"][i]["strMeal"]))
     #for i in foodlist:
       #  print(i[0],i[1])
+
+    #returns a list of food that the user picks from
     return foodlist
 
 def food_search(foodnumber):
@@ -102,9 +106,10 @@ def print_food(food):
     response = urllib.request.urlopen(url)
     json_text = response.read().decode(encoding = 'utf-8')
     table = json.loads(json_text)
+    #prints the chosen food along with ingredients and instructions
     return table
-    #print(table)
-    '''for i in table["meals"]:
+    '''print(table)
+    for i in table["meals"]:
         #print("Ingredients:")
         for a in range(1,21):
             if i[f"strIngredient{a}"] != "":
@@ -137,14 +142,14 @@ app = Flask(__name__)
 def hello_world(food,number):
 
 
-    food_choices = get_recipes(food) #food choices
+    food_choices = get_recipes(food) #food choices must be printed
     food_string = get_food_string(number) #food string to put in as link
-    table = print_food(food_string)
+    table = print_food(food_string) #table must be printed
     
     #for youtube link
     url = build_search_url(food_search(number),3)
     answer = get_result(url) #returns json of all food info
-    table_two = addlist(answer)
+    table_two = addlist(answer) #table_two must be printed
     return f'{food}'
 
 
