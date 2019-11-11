@@ -144,9 +144,7 @@ def hello_world(food,number):
     #for youtube link
     url = build_search_url(foodsearch(number))
     answer = get_result(url) #returns json of all food info
-]   table_two = addlist(answer)
+    table_two = addlist(answer)
     return f'{food}'
 
 
-if __name__ == '__main__':
-    run()
