@@ -19,23 +19,25 @@ def home():
     if form.is_submitted():
         # get food choices
         food_choices = backend_functions.get_recipes(form.food.data)
-        #backend_functions.printStuff(food_choices)
-        #food_names = []
-        #for i,c in food_choices:
-        #    food_names.append(c)
-        #backend_functions.printStuff(food_names)
         # load next page
         choiceForm = ChoiceForm()
         # receive data
         if choiceForm.validate_on_submit():
             # get recipe
-            #backend_functions.printStuff(food_names)
-            #index = int(choiceForm.choice.data)
             food_string = choiceForm.choice.data.replace(" ", "_")
-            #backend_functions.printStuff(food_names)
-            #backend_functions.printStuff(food_string)
             result = backend_functions.print_food(food_string)
+            ### tryna add youtube stuff
+            food_name = choiceForm.choice.data
+            url = backend_functions.build_search_url(food_name)
+            answer = backend_functions.get_result(url)
+            table = backend_functions.addlist(answer)
+            backend_functions.printStuff(table)
+            result.append("\nYouTube Vidoes\n")
+            for name,link,thumbnail in table:
+                line = name + ": " + link + "\."
+                result.append(line)
+            ###
             # load results
-            return render_template("results.html", result=result)
+            return render_template("results.html", result=result)  # maybe add a redirect to home?
         return render_template("choices.html", choiceForm=choiceForm, options=food_choices)
     return render_template("home.html", title="ZotYum", form=form)

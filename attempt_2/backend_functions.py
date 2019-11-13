@@ -15,7 +15,7 @@ videos_to_display = []
 FOOD_URL = "https://www.themealdb.com/api/json/v1/1/filter.php?i="
 
 
-def build_search_url(search_query, max_results):
+def build_search_url(search_query, max_results=5):
     query_parameters = [
         ('key', GOOGLE_API_KEY), ('part', 'snippet'),
         ('type', 'video'), ('maxResults', str(max_results)),
@@ -66,31 +66,6 @@ def addlist(search_result: dict) -> None:
     videos_to_display.append((titlelist[index_three],youtube_link+idlist[index_three],thumbnaillist[index_three]))
     return videos_to_display
 
-
-    
-
-
-
-"""
-def get_recipes(main_food):
-    x = True
-    foodlist = []
-    while x:
-        #main_food = input("What main food?")  use paramater instead
-        link = FOOD_URL+str(main_food)
-        response = urllib.request.urlopen(link)
-        json_text = response.read().decode(encoding = 'utf-8')
-        table = json.loads(json_text)
-        if table["meals"] !=None:
-            x = False
-        if x:
-            print("invalid food option, try again")
-    for i in range(len(table["meals"])):
-        foodlist.append((i+1,table["meals"][i]["strMeal"]))
-    #for i in foodlist:
-      #  print(i[0],i[1])
-    return foodlist
-"""
 def get_recipes(main_food):
     x = True
     foodlist = []
@@ -107,16 +82,7 @@ def get_recipes(main_food):
     for i in range(len(table["meals"])):
         foodlist.append((i+1,table["meals"][i]["strMeal"]))
     return foodlist
-"""
-    for i in range(len(table["meals"])):
-        foodlist.append((i+1,table["meals"][i]["strMeal"]))
-    print("Which meal? Select number")
-    for i in foodlist:
-        print(i[0],i[1])
-    foodnumber = int(input())
-    currentfood = foodlist[foodnumber-1][1].lower().replace(" ","_")
-    return currentfood
-"""
+
 def food_search(foodnumber):
     return foodlist[foodnumber-1][1]
 def get_food_string(foodnumber, foodlist):
@@ -137,29 +103,13 @@ def print_food(food):
     for i in table["meals"]:
         result.append("Ingredients:")
         for a in range(1,21):
-            if i[f"strIngredient{a}"] != "":
+            if i[f"strIngredient{a}"] != None:
                 result.append(i[f"strIngredient{a}"] + " " + i[f"strMeasure{a}"])
         result.append("\n")
         result.append(i["strMeal"]+":")
         result.append(i['strInstructions'] + "\n")
     return result
-    
-def confirm():
-    print("something's happening")
 
-#def run() -> None:
-'''
-   current_food = get_recipes()
-   x = build_search_url(current_food,3)
-    result = get_result(x)
-    addlist(result)
-
-    get user input and put into get_recipes// returns list of foods with choice number
-    get user input of choice number and put into get_food_string
-    put answer of get_food_string into print_food, returns table where you print ingrediants meals and instructions
-    use food_search and put answer into  build_search_url, put url into get_result
-    put answer from get_result into addlist, returns  table with 1.title 2.video link 3.Thumbnail link
-'''
 def run():
     userIn = input("main food: ")
     #current_food = get_recipes(userIn)
@@ -194,7 +144,7 @@ def hello_world():
     table = print_food(food_string)
     
     #for youtube link
-    url = build_search_url(foodsearch(number))
+    url = build_search_url(foodsearch(number))  # name of food
     answer = get_result(url) #returns json of all food info
     table_two = addlist(answer)
     print(table_two)
